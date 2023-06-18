@@ -64,6 +64,7 @@ function Kasse(){
     const [riktigadresse, setriktigadresse] = useState(true)
     const [riktigcity, setriktigcity]=useState(true);
     const [bought,setbought] = useState([])
+    const [loading,setloading]=useState(true)
 
     useEffect(()=>{
         async function get(){
@@ -75,6 +76,7 @@ function Kasse(){
             })
             const new_bought= await response.json()
             setbought(new_bought)
+            setloading(false)
         }
         get();
     },[])
@@ -90,19 +92,20 @@ function Kasse(){
         }else{
           ttq+=ene.amount*parseInt(prod.navn.split(" ")[0]);
         }
-    })
+        settotal_pris(tt)
+      })
 
-    if(ttq>1000 && ttq<4000){
+      if(ttq>1000 && ttq<4000){
         setshipping(500)
-    } else if(ttq>100 && ttq<500){
+      } else if(ttq>100 && ttq<500){
         setshipping(200)
-    } else if(ttq>40 && ttq<100){
+      } else if(ttq>40 && ttq<100){
         setshipping(100)
-    } else{
+      } else{
         setshipping(40)
-    }
-      settotal_pris(tt)
-    },[])
+      }
+      settotal_pris(total_pris+shipping)
+    },[loading])
 
     async function settinn(e) {
       e.preventDefault();
@@ -394,7 +397,7 @@ function Kasse(){
       }
     }
 
-  if(bought.length>0){
+  if(bought.length>0 && !loading){
       return <div className="checkout">
 
       <div className="chekout_header">
@@ -476,7 +479,7 @@ function Kasse(){
       <Betaling bought={bought}/>}
     </div>
   }else{
-    return <div><h1>loading</h1></div>
+    return <div className="load"><h1 className="load_text">...loading</h1></div>
   }
 }
 

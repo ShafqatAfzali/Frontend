@@ -53,14 +53,14 @@ export default function Hovedadmin(){
         const res_salg=salg.filter((sal)=>{
             let fant=false;
             setvisalt(false)
-            if(sal.id==parseInt(søkverdi)){
+            if(sal.id===parseInt(søkverdi)){
                 fant=true
             }
             return fant
         })
         const res_kunde=kunde.filter((kund)=>{
             let fant=false;
-            if(kund.navn==søkverdi || kund.email==søkverdi || kund.id==parseInt(søkverdi) || kund.telefon==parseInt(søkverdi)){
+            if(kund.navn===søkverdi || kund.email===søkverdi || kund.id===parseInt(søkverdi) || kund.telefon===parseInt(søkverdi)){
                 fant=true
             }
             return fant
@@ -69,9 +69,9 @@ export default function Hovedadmin(){
             if(res_kunde.length>0){
                 //flere folk kan ha flere kjøp
                 let all_salg_inf=[];
-                const final_res=res_kunde.forEach((kund)=>{
-                    const antall_handel=salg.forEach((sal) => {
-                        if(sal.kunde_id==kund.id){
+                res_kunde.forEach((kund)=>{
+                    salg.forEach((sal) => {
+                        if(sal.kunde_id===kund.id){
                             const data={kunde_id:kund.id,navn:kund.navn, telefon:kund.telefon, Adresse:kund.Adresse, status_:kund.status_, betalt:sal.betalt, valuta:sal.valuta, tid_kjøpt:sal.tid_kjøpt, tid_sendt:sal.tid_sendt,slag_id:sal.id, varer:sal.produkt_kjøpt};
 
                             all_salg_inf.push(data)
@@ -82,7 +82,7 @@ export default function Hovedadmin(){
                 setkunde_exist(true)
 
             } else{
-                let kunde_som_kjøpte=kunde.filter(kund => kund.id==res_salg[0].kunde_id)
+                let kunde_som_kjøpte=kunde.filter(kund => kund.id===res_salg[0].kunde_id)
                 kunde_som_kjøpte=kunde_som_kjøpte[0]
 
                 const data={kunde_id:kunde_som_kjøpte.id,navn:kunde_som_kjøpte.navn, telefon:kunde_som_kjøpte.telefon, Adresse:kunde_som_kjøpte.Adresse, status_:kunde_som_kjøpte.status_, betalt:res_salg[0].betalt, valuta:res_salg[0].valuta, tid_kjøpt:res_salg[0].tid_kjøpt, tid_sendt:res_salg[0].tid_sendt,slag_id:res_salg[0].id}
@@ -95,7 +95,7 @@ export default function Hovedadmin(){
     }
 
     async function changestate(){
-        const resp = await fetch("/api/change-state", {
+        await fetch("/api/change-state", {
             method: "POST",
             headers: {
                 "Content-type":"application/json",
@@ -148,7 +148,7 @@ export default function Hovedadmin(){
             <button onClick={changestate}>bekreft endringer</button>
             {kunde.map((person,index)=>{
                 const salget=salg.find(ene=>ene.betaling_id=person.betaling_id)
-                if(person.status_ == "ikke sendt"){
+                if(person.status_ === "ikke sendt"){
                     return <li key={index} style={{margin:"25px", backgroundColor:"slategray", borderStyle:"solid", borderRadius:"13px", borderColor:"lightgreen"}}>
                     <h4>kunde id: {person.id}, navn: {person.navn}, email:{person.email}, telefon: {person.telefon}</h4>
                     <h3>land:{person.country} zip code:{person.zip_code}, city:{person.city} adresse:{person.Adresse}</h3>
@@ -160,7 +160,7 @@ export default function Hovedadmin(){
 
         {visalt && (vis_hva.sendt && <ul style={{margin:"10px", backgroundColor:"whitesmoke", borderStyle:"solid", borderRadius:"5px", borderColor:"lightgreen"}}>
             {kunde.map((person,index)=>{
-                if(person.status_ == "sendt"){
+                if(person.status_ === "sendt"){
                     return <li key={index} style={{margin:"25px", backgroundColor:"slategray", borderStyle:"solid", borderRadius:"13px", borderColor:"lightgreen"}}>
                     <h4>kunde id: {person.id}, navn: {person.navn}, email:{person.email}, telefon: {person.telefon}</h4>
                     <h3>land:{person.country} zip code:{person.zip_code}, city:{person.city} adresse:{person.Adresse}</h3>

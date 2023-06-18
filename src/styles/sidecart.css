@@ -12,6 +12,19 @@
     }
 }
 
+.load{
+    position: absolute;
+    display: flex;
+    height: 100%;
+    width: 100%;
+    background-color: var(--color1);
+    align-items: center;
+    justify-content: center;
+}
+.load_text{
+    color: var(--color3);
+}
+
 .cart-header{
     position: absolute;
     display: inline-block;
